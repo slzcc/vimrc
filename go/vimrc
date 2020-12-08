@@ -60,13 +60,16 @@ set smartcase                   " 搜索模式包含 ... 就不是大小写区�
 
 set linespace=0                 " 行间距
 set updatetime=100              " 更新后 swap 写入磁盘时间
-set cursorline                  " 📢所在行高亮
+set cursorline                  " 所在行高亮
 set splitbelow                  " 将垂直窗口分割到当前窗口
 set splitright                  " 将下面的水平窗口分割为当前窗口
 set background=dark             " 配色方案
 set guioptions-=m               " 禁止显示菜单和工具条
 set guioptions-=T
 set nowrap                      " 禁止折行
+let mapleader = ','             " 快捷键<Leader>
+set guifont=DroidSansMono_Nerd_Font:h11
+                                " 默认字体
 set foldmethod=syntax           " 基于缩进或语法进行代码折叠
                                 " set foldmethod=indent
 set nofoldenable                " 启动 vim 时关闭折叠代码
@@ -76,11 +79,12 @@ set completeopt=menu,menuone
 set t_Co=256                    " terminal Color 颜色
 set switchbuf=usetab,usetab     " 总是在新的选项卡中打开新的缓冲区
 set formatoptions+=tcroqw
-set listchars=tab:»■,trail:■    " 如果行尾有多余的空格（包括 Tab 键），该配置将让这些空格显示成可见的小方块。
-set list
+" set listchars=tab:»■,trail:■    " 如果行尾有多余的空格（包括 Tab 键），该配置将让这些空格显示成可见的小方块。
+"set list
 set wildignore+=*/.git/*,*/.hg/*,*/.svn/*,*/cscope*,*/*.csv/,*/*.log,*tags*,*/bin/*
                                 " 搜索时忽略的文件与目录
 set fileencodings=utf-bom,utf-8,gbk,gb2312,gb18030,cp936,latin1
+set termencoding=utf-8
                                 " 支持的字符集
 if has('conceal')
   set conceallevel=2 concealcursor=niv
@@ -94,17 +98,15 @@ endif
 
 " &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
 " &&&&&&
-" &&&&&& set 插件配置
+" &&&&&& 插件配置
 " &&&&&&
 
 set rtp+=~/.vim/bundle/Vundle.vim
 "vundle管理的插件列表必须位于 vundle#begin() 和 vundle#end() 之间
 call vundle#begin()
 
-" 全局搜索 Command + F
-" 默认搜索当前光标下单词，也可以自己输入
-" Ctrl + j、k 可以在上下搜索匹配处切换
-" :CtrlSFOpen 可以打开之前的搜索结果窗口，而不是重新搜索
+" 全局搜索
+" 安装依赖 brew install the_silver_searcher
 Plugin 'dyng/ctrlsf.vim'
 
 " 自动补全
@@ -114,6 +116,9 @@ Plugin 'Valloric/YouCompleteMe'
 
 " 插件功能
 Plugin 'VundleVim/Vundle.vim'
+
+" 快速注释
+Plugin 'tomtom/tcomment_vim'
 
 " vim 颜色
 Plugin 'altercation/vim-colors-solarized'
@@ -132,11 +137,33 @@ Plugin 'nvie/vim-flake8'
 " 当前配置没有设置打开自动开启NERDTree，启用可以通过执行 :NERDTree （执行命令支持Tab键补全） 或 快捷键 Command + e
 " ,e 在文件树中查找当前文件（定位的效果）
 " 通过? 查看和取消查看帮助
+" ctrl + w + h    光标 focus 左侧树形目录
+" ctrl + w + l    光标 focus 右侧文件显示窗口
+" ctrl + w + w    光标自动在左右侧窗口切换
+" ctrl + w + r    移动当前窗口的布局位置
+" o       在已有窗口中打开文件、目录或书签，并跳到该窗口
+" go      在已有窗口 中打开文件、目录或书签，但不跳到该窗口
+" t       在新 Tab 中打开选中文件/书签，并跳到新 Tab
+" T       在新 Tab 中打开选中文件/书签，但不跳到新 Tab
+" i       split 一个新窗口打开选中文件，并跳到该窗口
+" gi      split 一个新窗口打开选中文件，但不跳到该窗口
+" s       vsplit 一个新窗口打开选中文件，并跳到该窗口
+" gs      vsplit 一个新 窗口打开选中文件，但不跳到该窗口
+" !       执行当前文件
+" O       递归打开选中 结点下的所有目录
+" m    文件操作：复制、删除、移动等
 Plugin 'scrooloose/nerdtree'
 
 " 目录树 git 插件
 Plugin 'Xuyuanp/nerdtree-git-plugin'
 Plugin 'jistr/vim-nerdtree-tabs'
+
+" 目录树美化插件
+"Plugin 'ryanoasis/vim-devicons'
+"Plugin 'tiagofumo/vim-nerdtree-syntax-highlight'
+
+" 缩进插件,黑白缩进
+"Plugin 'nathanaelkane/vim-indent-guides'
 
 " 快速查找项目文件 Command + P
 " 搜索后Ctrl + k 选择上一个文件， Ctrl + j 选择下一个文件， 回车打开
@@ -175,16 +202,17 @@ Plugin 'ervandew/supertab'
 Plugin 'Lokaltog/vim-easymotion'
 Plugin 'rking/ag.vim'
 
-" 多行编辑
-" 实现Sublime Text的快速选择编辑，用法：
-" 选中单词，可以通过 v 或者 *、#来实现，再Ctrl + n 选择下一个相同的。
-" 回车选中相同单词，类似Sublime Command+D
-Plugin 'terryma/vim-multiple-cursors'
+" 新多行编译
+Plugin 'mg979/vim-visual-multi'
 Plugin 'chrisbra/csv.vim'
 Plugin 'gregsexton/gitv'
 Plugin 'vim-scripts/matchit.zip'
-Plugin 'tomtom/tcomment_vim'
+" 语法检查(支持大部分语言）
+"
 Plugin 'scrooloose/syntastic'
+
+" Vue开发插件
+Plugin 'posva/vim-vue'
 
 " 快速处理环绕标签
 " 测试内容：'Hello World, Hello HTTPS!'
@@ -200,12 +228,50 @@ Plugin 'raymond-w-ko/vim-lua-indent'
 Plugin 'godoctor/godoctor.vim'
 " 插件列表结束
 call vundle#end()
+" 插件简要使用
+" :PluginList       - 插件列表
+" :PluginInstall    - 安装插件; 加!表示更新
+" :PluginSearch foo - 搜索插件 foo; 加!刷新本地缓存
+" :PluginClean      - 移除插件; 加!不需要确认
+
 filetype plugin indent on
 
 " &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
 " &&&&&&
 " &&&&&& let 变量配置
 " &&&&&&
+
+" vim-airline
+"" https://cloud.tencent.com/developer/article/1681644
+" air-line plugin specific commands
+"let g:airline_powerline_fonts = 1
+
+"if !exists('g:airline_symbols')
+"    let g:airline_symbols = {}
+"endif
+
+" unicode symbols
+"let g:airline_left_sep = '»'
+"let g:airline_left_sep = '▶'
+"let g:airline_right_sep = '«'
+"let g:airline_right_sep = '◀'
+"let g:airline_symbols.linenr = '␊'
+"let g:airline_symbols.linenr = '␤'
+"let g:airline_symbols.linenr = '¶'
+"let g:airline_symbols.branch = '⎇'
+"let g:airline_symbols.paste = 'ρ'
+"let g:airline_symbols.paste = 'Þ'
+"let g:airline_symbols.paste = '∥'
+"let g:airline_symbols.whitespace = 'Ξ'
+
+"" airline symbols
+"let g:airline_left_sep = ''
+"let g:airline_left_alt_sep = ''
+"let g:airline_right_sep = ''
+"let g:airline_right_alt_sep = ''
+"let g:airline_symbols.branch = ''
+"let g:airline_symbols.readonly = ''
+"let g:airline_symbols.linenr = ''
 
 " vim-go
 let g:go_fmt_command = "goimports" " 格式化将默认的 gofmt 替换
@@ -384,51 +450,9 @@ let g:ctrlp_prompt_mappings = {
                         \ 'PrtExit()':            ['<esc>', '<c-c>', '<c-g>'],
                         \ }
 
-let g:ctrlsf_winsize = '30%'
 
 " 不搜索Go、nodejs的 库目录
 let g:ctrlsf_ignore_dir = ["node_modules", "vendor"]
-
-" 多行编辑
-if has("gui_macvim")
-    " set transparency=10 " Make the window slightly transparent
-    " set fullscreen
-    let g:ctrlp_map = '<D-p>'
-    nmap <C-]> g<c-]>
-    nmap <D-r> :MyCtrlPTag<cr>
-    imap <D-r> <esc>:MyCtrlPTag<cr>
-    nmap <D-R> :CtrlPBufTagAll<cr>
-    imap <D-R> <esc>:CtrlPBufTagAll<cr>
-    
-    " 关闭缓冲区，不退出窗口(对未保存的有点小问题)
-    nmap <D-w> :bp<bar>sp<bar>bn<bar>bd<CR>
-    imap <D-w> <esc>:bp<bar>sp<bar>bn<bar>bd<CR>
-    map <D-/> :TComment<cr>
-    vmap <D-/> :TComment<cr>gv
-    nmap <D-f> :CtrlSF <C-R>=expand("<cword>")<CR>
-    imap <D-f> <ESC>:CtrlSF <C-R>=expand("<cword>")<CR>
-    vnoremap <D-f>  y :CtrlSF"<C-R>=escape(@", '"')<CR>"
-    vnoremap <D-S-f>  y :a
-    map <D-e> :NERDTreeTabsToggle<CR>
-    map <leader>e :NERDTreeFind<CR><CR>
-    
-    " Open sidebar with cmd+k
-    " map <D-k> :NERDTreeTabsToggle<CR>
-    " Window switch map {{{
-    map <D-j> <C-W>j
-    map <D-k> <C-W>k
-    map <D-l> <C-W>l
-    map <D-h> <C-W>h
-
-    " cscope {{{"
-    nmap <D-[> :cs find c <C-R>=expand("<cword>")<CR><CR><C-O>:copen<CR>
-    nmap <D-\> :cs find s <C-R>=expand("<cword>")<CR><CR><C-O>:copen<CR>
-    nmap <D-]> :cs find g <C-R>=expand("<cword>")<CR><CR>
-    " }}}
-
-    " Sublime Command+Enter
-    inoremap <D-CR> <ESC>A<CR>
-endif
 
 " 自定义快速查找
 func! MyCtrlPTag()
@@ -439,6 +463,21 @@ func! MyCtrlPTag()
         CtrlPBufTag
 endfunc
 com! MyCtrlPTag call MyCtrlPTag()
+
+" 全局查找
+command! CO CtrlSFOpen
+let g:ctrlsf_winsize = '30%'
+let g:ctrlsf_auto_close = 1
+
+" 多光标使用鼠标映射
+let g:VM_mouse_mappings = 1
+
+" 随 vim 自启动
+let g:indent_guides_enable_on_vim_startup=1
+" 从第二层开始可视化显示缩进
+let g:indent_guides_start_level=2
+" 色块宽度
+let g:indent_guides_guide_size=1
 
 " &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
 " &&&&&&
@@ -468,7 +507,7 @@ autocmd BufWrite /private/tmp/crontab.* set nowritebackup nobackup
 " Don't write backup file if vim is being called by "chpass"
 autocmd BufWrite /private/etc/pw.* set nowritebackup nobackup
 
-autocmd FileType go :set noexpandtab
+"autocmd FileType go :set noexpandtab
 autocmd FileType yaml setlocal ts=2 sts=2 sw=2 expandtab
 autocmd FileType json :set cole=0
 
@@ -504,12 +543,22 @@ map <leader>g  :YcmCompleter GoToDefinitionElseDeclaration<CR>
 nnoremap <space> @=((foldclosed(line('.')<0)?'zc':'zo'))<CR>
 
 " 关闭NERDTree快捷键
+map <leader>r :NERDTreeMirror<CR>
 map <leader>t :NERDTreeToggle<CR>
 
 " tagbar 右窗口函数列表
 " 将开启tagbar的快捷键设置为　<Leader>tb
 nmap <Leader>tb :TagbarToggle<CR>
 "nmap <F9> :TagbarToggle<CR>
+
+" Command + / 加注释
+map <Leader>/ :TComment<CR>
+vmap <Leader>/ :TComment<CR>
+imap <Leader>/ :TComment<CR>
+vnoremap <Leader>/ :TComment<CR>
+
+" ,f 快速搜索
+nnoremap <Leader>f :CtrlSF<Space>
 
 " 去掉暂时退出 vim 窗口快捷键
 "noremap <c-z> <NOP>
@@ -541,14 +590,21 @@ vnoremap <leader>d ""d
 vnoremap <leader>dd ""dd
 
 " vim-go 快捷键
+"" 测试
 nmap <Leader>gt :GoTest<CR>
+"" 安装
 nmap <Leader>gi :GoInstall<CR>
+"" 将当前光标下的符号替换为 [to]
 nmap <Leader>gr :GoRename<CR>
+""
 nmap <Leader>ge :GoReferrers<CR>
+""
 nmap <Leader>gl :Gpull<CR>
 nmap <Leader>gp :Gpush<CR>
-nmap <Leader>cc :Gstatus<CR>
+""
 nmap <Leader>gs :Gstatus<CR>
+"" 编译
+nmap <Leader>gb :GoBuild<CR>
 
 " &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
 " &&&&&&
@@ -569,6 +625,12 @@ highlight Visual         guibg=#2566FA
 highlight VertSplit      guibg=#1B1D1E
 highlight Cursor         guibg=#FF0000
 
+" 光标正行选中部分的底色
+" hi CursorLine   guibg=#D8D8DD ctermbg=253  gui=NONE cterm=NONE
+" 光标选中部分的底色
+" hi CursorColumn guibg=#ffff00 ctermbg=253  gui=NONE cterm=NONE
+hi Search guibg=#ffff00 ctermbg=253  gui=NONE cterm=NONE
+
 " Flagging Unnecessary Whitespace
 " http://stackoverflow.com/questions/11087041/gvim-to-custom-highlight-group-in-vimrc-not-working
 "hi BadWhitespace guifg=gray guibg=red ctermfg=gray ctermbg=red
@@ -587,6 +649,11 @@ match BadWhitespace /\s\+$\| \+\t/
 " &&&&&&
 " &&&&&& 功能键补充说明
 " &&&&&& https://www.bde.enseeiht.fr/~ollagnn/vim/vimrc/
+
+" 其中：<Esc>代表Escape键；<CR>代表Enter键；而功能键则用<F10>表示。首先进入命令行模式，然后执行新建标签页的:tabnew命令，最后返回常规模式。
+" 同理：对于组合键，可以用<C-Esc>代表Ctrl-Esc；使用<S-F1>表示Shift-F1。对于Mac用户，可以使用<D>代表Command键。
+" 注意：Alt键可以使用<M-key>或<A-key>来表示。
+" 关于键盘符号的详细说明，请使用:h key-notation命令查看帮助信息。
 
 " 上半翻页 Ctrl + d
 " 下班翻页 Ctrl + u
