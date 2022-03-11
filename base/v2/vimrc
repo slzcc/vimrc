@@ -1,0 +1,675 @@
+" @Shileizcc vim Configure
+" &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
+" &&&&&&
+" &&&&&&        在使用的时候有4种模式
+" &&&&&&
+" &&&&&&        Normal  （正常模式）
+" &&&&&&        Insert  （插入模式）
+" &&&&&&        Visual  （可视模式）
+" &&&&&&        :       （命令模式）
+
+filetype off                    " 检测文件当前类型
+
+" &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
+" &&&&&&
+" &&&&&& 功能选项参数配置
+" &&&&&&
+
+set undodir=~/.undodir          " 重定向 undodir 目录
+
+set tags=tags                   " tags 无法找到
+set autochdir
+set number                      " 显示行号
+set shortmess=atI               " 启动时隐去援助提示
+set nobackup                    " 不需要备份
+set nocompatible                " 不与 vi 进行兼容
+set confirm                     " 没有保存或文件只读时弹出确认
+set mouse=a                     " 鼠标可用, a 为 vim 模式此时支持鼠标滚轮, v 为鼠标选中模式不支持鼠标滚轮
+set tabstop=4                   " tab 缩进,空格长度为4
+set shiftwidth=4                " 设置程序自动缩进时所占的空格长度，最好设置为与tabstop相同
+set softtabstop=4               " 在开启expantab后，需要设置使用退格键（backspace）时删除的空格数
+set expandtab                   " 将输入的tab展开成空格，如果要使用tab，输入ctrl＋v
+                                " set smarttab
+set autoread                    " 文件自动检测外部更改
+set cindent                     " c 文件自动缩进
+set autoindent                  " 自动对齐
+set smartindent                 " 智能缩进
+set hlsearch                    " 高亮查找匹配
+set showmatch                   " 显示匹配
+set ruler                       " 显示标尺，就是在右下角显示光标位置
+set novisualbell                " 不要闪烁
+set laststatus=2                " 启动显示状态行
+set showcmd                     " 显示输入的命令
+set fillchars=vert:/            " 被分割窗口之间显示空白
+set fillchars=stl:/
+set fillchars=stlnc:/
+set undofile                    " 保留撤销历史
+set history=1000                " 记录的操作历史数量
+set noerrorbells                " 当错误发生的时候将不会发出 bi 的一声
+                                " 如果想要在出错的时候有一些提示，可以使用 visualbell
+set backspace=indent,eol,start  " 退格缩进配置与 vi 兼容
+                                " indent: 如果用了:set indent,:set ai 等自动缩进，想用退格键将字段缩进的删掉，必须设置这个选项。否则不响应。
+                                " eol:如果插入模式下在行开头，想通过退格键合并两行，需要设置eol。
+                                " start:要想删除此次插入前的输入，需设置这个。
+set showmode                    " 底部显示当前的编辑模式
+set noswapfile                  " 不使用 swap 文件
+set autowrite                   " Automatically save before :next, :make etc.
+set autoread                    " Automatically reread changed files without asking me anything
+set fileformats=unix,dos,mac    " 选择Unix 而不是Windows而不是OS 9格式
+set incsearch                   " 在输入时显示匹配
+set ignorecase                  " 搜索不区分大小写
+set smartcase                   " 搜索模式包含 ... 就不是大小写区分模式了
+
+set linespace=0                 " 行间距
+set updatetime=100              " 更新后 swap 写入磁盘时间
+set cursorline                  " 所在行高亮
+set splitbelow                  " 将垂直窗口分割到当前窗口
+set splitright                  " 将下面的水平窗口分割为当前窗口
+set background=dark             " 配色方案
+set guioptions-=m               " 禁止显示菜单和工具条
+set guioptions-=T
+set nowrap                      " 禁止折行
+let mapleader = ','             " 快捷键<Leader>
+set guifont=DroidSansMono_Nerd_Font:h11
+                                " 默认字体
+set foldmethod=syntax           " 基于缩进或语法进行代码折叠
+                                " set foldmethod=indent
+set nofoldenable                " 启动 vim 时关闭折叠代码
+set encoding=utf-8              " 编码设置
+set clipboard=unnamed           " 共享剪切板
+set completeopt=menu,menuone
+set t_Co=256                    " terminal Color 颜色
+set switchbuf=usetab,usetab     " 总是在新的选项卡中打开新的缓冲区
+set formatoptions+=tcroqw
+" set listchars=tab:»■,trail:■    " 如果行尾有多余的空格（包括 Tab 键），该配置将让这些空格显示成可见的小方块。
+"set list
+set wildignore+=*/.git/*,*/.hg/*,*/.svn/*,*/cscope*,*/*.csv/,*/*.log,*tags*,*/bin/*
+                                " 搜索时忽略的文件与目录
+set fileencodings=utf-bom,utf-8,gbk,gb2312,gb18030,cp936,latin1
+set termencoding=utf-8
+                                " 支持的字符集
+if has('conceal')
+  set conceallevel=2 concealcursor=niv
+endif
+                                " 当文本被标记为"隐藏字符"的时候，conceallevel 决定这些文本如何显示，它有四个值：
+                                " 设为 0，不隐藏，该咋样还是咋样（这是默认值，所以占位符依然看得见）
+                                " 设为 1，每一块隐藏字符用一个特殊字符来替换，这个字符是由当前使用的语法配置设置的，如果语法高亮没有，那就使用 listchars 选项里设置的字符，如果这也没有，默认的替换字符是一个空格
+                                " 设为 2，让隐藏字符完全隐藏（意思是即便默认的空格也不用），但如果语法配置里有设置替换字符的话，就用设置的
+                                " 设为 3，完全不显示隐藏字符，不管有没有任何设置。
+
+
+" &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
+" &&&&&&
+" &&&&&& 插件配置
+" &&&&&&
+
+set rtp+=~/.vim/bundle/Vundle.vim
+"vundle管理的插件列表必须位于 vundle#begin() 和 vundle#end() 之间
+call vundle#begin()
+
+" 全局搜索
+" 安装依赖 brew install the_silver_searcher
+Plugin 'dyng/ctrlsf.vim'
+
+" 自动补全
+" 输入时自动提示TAB键可以切换
+" ife 这类代码片段，通过Ctrl + j 来代替TAB(解决与YouCompleteMe冲突问题)
+Plugin 'Valloric/YouCompleteMe'
+
+" 插件功能
+Plugin 'VundleVim/Vundle.vim'
+
+" 快速注释
+Plugin 'tomtom/tcomment_vim'
+
+" vim 颜色
+Plugin 'altercation/vim-colors-solarized'
+
+" 查看变量函数结构 Command + y
+Plugin 'majutsushi/tagbar'
+Plugin 'Lokaltog/vim-powerline'
+Plugin 'octol/vim-cpp-enhanced-highlight'
+Plugin 'Raimondi/delimitMate'
+Plugin 'jnurmine/Zenburn'
+Plugin 'nvie/vim-flake8'
+
+" 目录树
+" 当前配置没有设置打开自动开启NERDTree，启用可以通过执行 :NERDTree （执行命令支持Tab键补全） 或 快捷键 Command + e
+" ,e 在文件树中查找当前文件（定位的效果）
+" 通过? 查看和取消查看帮助
+" ctrl + w + h    光标 focus 左侧树形目录
+" ctrl + w + l    光标 focus 右侧文件显示窗口
+" ctrl + w + w    光标自动在左右侧窗口切换
+" ctrl + w + r    移动当前窗口的布局位置
+" o       在已有窗口中打开文件、目录或书签，并跳到该窗口
+" go      在已有窗口 中打开文件、目录或书签，但不跳到该窗口
+" t       在新 Tab 中打开选中文件/书签，并跳到新 Tab
+" T       在新 Tab 中打开选中文件/书签，但不跳到新 Tab
+" i       split 一个新窗口打开选中文件，并跳到该窗口
+" gi      split 一个新窗口打开选中文件，但不跳到该窗口
+" s       vsplit 一个新窗口打开选中文件，并跳到该窗口
+" gs      vsplit 一个新 窗口打开选中文件，但不跳到该窗口
+" !       执行当前文件
+" O       递归打开选中 结点下的所有目录
+" m    文件操作：复制、删除、移动等
+Plugin 'scrooloose/nerdtree'
+
+" 目录树 git 插件
+Plugin 'Xuyuanp/nerdtree-git-plugin'
+Plugin 'jistr/vim-nerdtree-tabs'
+
+" 目录树美化插件
+"Plugin 'ryanoasis/vim-devicons'
+"Plugin 'tiagofumo/vim-nerdtree-syntax-highlight'
+
+" 缩进插件,黑白缩进
+"Plugin 'nathanaelkane/vim-indent-guides'
+
+" 快速查找项目文件 Command + P
+" 搜索后 Ctrl + k 选择上一个文件， Ctrl + j 选择下一个文件， 回车打开
+Plugin 'dyng/ctrlp.vim'
+
+" Git
+Plugin 'tpope/vim-fugitive'
+Plugin 'airblade/vim-gitgutter'
+
+" UI
+Plugin 'vim-airline/vim-airline'
+Plugin 'vim-airline/vim-airline-themes'
+Plugin 'zaki/zazen'
+Plugin 'noahfrederick/vim-hemisu'
+
+" Themes
+Plugin 'tomasr/molokai'
+
+" 有道翻译
+" 在普通模式下，按 ,y， 会翻译当前光标下的单词；
+" 在 visual 模式下选中单词或语句，按 ,y，会翻译选择的单词或语句；
+" :Ydc 翻译当前光标下单词
+" :Ydv 翻译在 visual 模式下选中单词或语句
+" :Yde 手动输入单词
+Plugin 'ianva/vim-youdao-translater'
+
+Plugin 'AndrewRadev/splitjoin.vim'
+
+" 引擎
+Plugin 'SirVer/ultisnips'
+
+" 代码块集合
+Plugin 'honza/vim-snippets'
+
+Plugin 'ervandew/supertab'
+Plugin 'Lokaltog/vim-easymotion'
+Plugin 'rking/ag.vim'
+
+" 新多行编译
+Plugin 'mg979/vim-visual-multi'
+Plugin 'chrisbra/csv.vim'
+Plugin 'gregsexton/gitv'
+Plugin 'vim-scripts/matchit.zip'
+
+" 语法检查(支持大部分语言）
+Plugin 'scrooloose/syntastic'
+
+" Vue开发插件
+Plugin 'posva/vim-vue'
+
+" 快速处理环绕标签
+" 测试内容：'Hello World, Hello HTTPS!'
+" cs'" 快速把当前 ' 环绕的字符改为由 " 环绕
+" cs'<p> 会修改为 <p>Hello World, Hello HTTPS!</p>
+Plugin 'tpope/vim-surround'
+
+Plugin 'klen/python-mode'
+Plugin 'davidhalter/jedi-vim'
+Plugin 'xolox/vim-misc'
+Plugin 'xolox/vim-lua-ftplugin'
+Plugin 'raymond-w-ko/vim-lua-indent'
+Plugin 'godoctor/godoctor.vim'
+
+" 插件列表结束
+call vundle#end()
+
+" 插件简要使用
+" :PluginList       - 插件列表
+" :PluginInstall    - 安装插件; 加!表示更新
+" :PluginSearch foo - 搜索插件 foo; 加!刷新本地缓存
+" :PluginClean      - 移除插件; 加!不需要确认
+
+filetype plugin indent on
+
+" &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
+" &&&&&&
+" &&&&&& let 变量配置
+" &&&&&&
+
+" vim-airline
+"" https://cloud.tencent.com/developer/article/1681644
+" air-line plugin specific commands
+"let g:airline_powerline_fonts = 1
+
+"if !exists('g:airline_symbols')
+"    let g:airline_symbols = {}
+"endif
+
+" unicode symbols
+"let g:airline_left_sep = '»'
+"let g:airline_left_sep = '▶'
+"let g:airline_right_sep = '«'
+"let g:airline_right_sep = '◀'
+"let g:airline_symbols.linenr = '␊'
+"let g:airline_symbols.linenr = '␤'
+"let g:airline_symbols.linenr = '¶'
+"let g:airline_symbols.branch = '⎇'
+"let g:airline_symbols.paste = 'ρ'
+"let g:airline_symbols.paste = 'Þ'
+"let g:airline_symbols.paste = '∥'
+"let g:airline_symbols.whitespace = 'Ξ'
+
+"" airline symbols
+"let g:airline_left_sep = ''
+"let g:airline_left_alt_sep = ''
+"let g:airline_right_sep = ''
+"let g:airline_right_alt_sep = ''
+"let g:airline_symbols.branch = ''
+"let g:airline_symbols.readonly = ''
+"let g:airline_symbols.linenr = ''
+
+" 设置状态栏主题风格
+let g:Powerline_colorscheme='solarized256'
+
+" 自动补全配置
+set completeopt=longest,menu "让Vim的补全菜单行为与一般IDE一致(参考VimTip1228)
+autocmd InsertLeave * if pumvisible() == 0|pclose|endif "离开插入模式后自动关闭预览窗口
+inoremap <expr> <CR>       pumvisible() ? "\<C-y>" : "\<CR>" "回车即选中当前项
+
+"上下左右键的行为 会显示其他信息
+inoremap <expr> <Down>     pumvisible() ? "\<C-n>" : "\<Down>"
+inoremap <expr> <Up>       pumvisible() ? "\<C-p>" : "\<Up>"
+inoremap <expr> <PageDown> pumvisible() ? "\<PageDown>\<C-p>\<C-n>" : "\<PageDown>"
+inoremap <expr> <PageUp>   pumvisible() ? "\<PageUp>\<C-p>\<C-n>" : "\<PageUp>"
+"youcompleteme  默认tab  s-tab 和自动补全冲突
+"let g:ycm_key_list_select_completion=['<c-n>']
+"let g:ycm_key_list_select_completion = ['<Down>']
+"let g:ycm_key_list_previous_completion=['<c-p>']
+"let g:ycm_key_list_previous_completion = ['<Up>']
+let g:ycm_confirm_extra_conf=0 "关闭加载.ycm_extra_conf.py提示
+let g:ycm_collect_identifiers_from_tags_files=1 " 开启 YCM 基于标签引擎
+let g:ycm_min_num_of_chars_for_completion=1 " 从第2个键入字符就开始罗列匹配项
+let g:ycm_cache_omnifunc=0 " 禁止缓存匹配项,每次都重新生成匹配项
+let g:ycm_seed_identifiers_with_syntax=1 " 语法关键字补全
+nnoremap <F5> :YcmForceCompileAndDiagnostics<CR> "force recomile with syntastic
+"nnoremap <leader>lo :lopen<CR> "open locationlist
+"nnoremap <leader>lc :lclose<CR> "close locationlist
+inoremap <leader><leader> <C-x><C-o>
+
+"在注释输入中也能补全
+let g:ycm_complete_in_comments = 1
+
+"在字符串输入中也能补全
+let g:ycm_complete_in_strings = 1
+
+"注释和字符串中的文字也会被收入补全
+let g:ycm_collect_identifiers_from_comments_and_strings = 0
+
+" tagbar 宽度
+let g:tagbar_width=45
+let g:tagbar_type_go = {
+    \ 'ctagstype' : 'go',
+    \ 'kinds'     : [
+        \ 'p:package',
+        \ 'i:imports:1',
+        \ 'c:constants',
+        \ 'v:variables',
+        \ 't:types',
+        \ 'n:interfaces',
+        \ 'w:fields',
+        \ 'e:embedded',
+        \ 'm:methods',
+        \ 'r:constructor',
+        \ 'f:functions'
+    \ ],
+    \ 'sro' : '.',
+    \ 'kind2scope' : {
+        \ 't' : 'ctype',
+        \ 'n' : 'ntype'
+    \ },
+    \ 'scope2kind' : {
+        \ 'ctype' : 't',
+        \ 'ntype' : 'n'
+    \ },
+    \ 'ctagsbin'  : 'gotags',
+    \ 'ctagsargs' : '-sort -silent'
+\ }
+
+" 修改树的显示图标
+let g:NERDTreeDirArrowExpandable = '►'
+let g:NERDTreeDirArrowCollapsible = '▼'
+let NERDTreeAutoCenter=1
+
+" 显示行号
+let NERDTreeShowLineNumbers=1
+
+" 是否显示隐藏文件
+let NERDTreeShowHidden=1
+
+" 设置宽度
+let NERDTreeWinSize=25
+
+" 在终端启动vim时，共享NERDTree
+let g:nerdtree_tabs_open_on_console_startup=1
+
+" 忽略一下文件的显示
+let NERDTreeIgnore=['\.pyc','\~$','\.swp']
+"let g:NERDTreeIndicatorMapCustom = {
+"    \ "Modified"  : "✹",
+"    \ "Staged"    : "✚",
+"    \ "Untracked" : "✭",
+"    \ "Renamed"   : "➜",
+"    \ "Unmerged"  : "═",
+"    \ "Deleted"   : "✖",
+"    \ "Dirty"     : "✗",
+"    \ "Clean"     : "✔︎",
+"    \ 'Ignored'   : '☒',
+"    \ "Unknown"   : "?"
+"    \ }
+
+" ctrlp 搜索时忽略的属性
+let g:ctrlp_cmd = 'CtrlPMixed'          " search anything (in files, buffers and MRU files at the same time.)
+let g:ctrlp_by_filename = 1
+let g:ctrlp_working_path_mode = 'ra'    " search for nearest ancestor like .git, .hg, and the directory of the current file
+let g:ctrlp_match_window_bottom = 1     " show the match window at the top of the screen
+let g:ctrlp_max_height = 10             " maxiumum height of match window
+let g:ctrlp_switch_buffer = 'Et'        " jump to a file if it's open already
+let g:ctrlp_use_caching = 1             " enable caching
+let g:ctrlp_clear_cache_on_exit=1       " speed up by not removing clearing cache evertime
+let g:ctrlp_mruf_max = 250              " number of recently opened files
+let g:ctrlp_open_new_file = 't'
+let g:ctrlp_open_multiple_files = 't'
+let g:ctrlp_open_new_file = 'r'
+let g:ctrlp_custom_ignore = {
+                        \ 'dir':  '\v[\/](\.git|\.hg|\.svn|\.build|github.com|labix.org|bin|pkg)$',
+                        \ 'file': '\v(\.exe|\.so|\.dll|\.a|\.xls|\.csv|\.json|\.log|\.out|gs|gw|gm|tags|gotags|\/U)$',
+                        \ 'link': 'SOME_BAD_SYMBOLIC_LINKS',
+                        \ }
+let g:ctrlp_buftag_types = {
+                        \ 'go'         : '--language-force=go --golang-types=ftv',
+                        \ 'as'         : '--language-force=actionscript --actionscript-types=fpvc',
+                        \ 'actionscript': '--language-force=actionscript --actionscript-types=fpvc',
+                        \ 'coffee'     : '--language-force=coffee --coffee-types=cmfvf',
+                        \ 'markdown'   : '--language-force=markdown --markdown-types=hik',
+                        \ 'objc'       : '--language-force=objc --objc-types=mpci',
+                        \ 'rc'         : '--language-force=rust --rust-types=fTm'
+                        \ }
+let g:ctrlp_prompt_mappings = {
+                        \ 'PrtBS()':              ['<bs>', '<c-]>'],
+                        \ 'PrtDelete()':          ['<del>'],
+                        \ 'PrtDeleteWord()':      ['<c-w>'],
+                        \ 'PrtClear()':           ['<c-u>'],
+                        \ 'PrtSelectMove("j")':   ['<c-j>', '<down>'],
+                        \ 'PrtSelectMove("k")':   ['<c-k>', '<up>'],
+                        \ 'PrtSelectMove("t")':   ['<Home>', '<kHome>'],
+                        \ 'PrtSelectMove("b")':   ['<End>', '<kEnd>'],
+                        \ 'PrtSelectMove("u")':   ['<PageUp>', '<kPageUp>'],
+                        \ 'PrtSelectMove("d")':   ['<PageDown>', '<kPageDown>'],
+                        \ 'PrtHistory(-1)':       ['<c-n>'],
+                        \ 'PrtHistory(1)':        ['<c-p>'],
+                        \ 'AcceptSelection("e")': ['<cr>', '<2-LeftMouse>'],
+                        \ 'AcceptSelection("h")': ['<c-x>', '<c-cr>', '<c-s>'],
+                        \ 'AcceptSelection("t")': ['<c-t>'],
+                        \ 'AcceptSelection("v")': ['<c-v>', '<RightMouse>'],
+                        \ 'ToggleFocus()':        ['<s-tab>'],
+                        \ 'ToggleRegex()':        ['<c-r>'],
+                        \ 'ToggleByFname()':      ['<c-d>'],
+                        \ 'ToggleType(1)':        ['<c-f>', '<c-up>'],
+                        \ 'ToggleType(-1)':       ['<c-b>', '<c-down>'],
+                        \ 'PrtExpandDir()':       ['<tab>'],
+                        \ 'PrtInsert("c")':       ['<MiddleMouse>', '<insert>'],
+                        \ 'PrtInsert()':          ['<c-\>'],
+                        \ 'PrtCurStart()':        ['<c-a>'],
+                        \ 'PrtCurEnd()':          ['<c-e>'],
+                        \ 'PrtCurLeft()':         ['<c-h>', '<left>', '<c-^>'],
+                        \ 'PrtCurRight()':        ['<c-l>', '<right>'],
+                        \ 'PrtClearCache()':      ['<F5>'],
+                        \ 'PrtDeleteEnt()':       ['<F7>'],
+                        \ 'CreateNewFile()':      ['<c-y>'],
+                        \ 'MarkToOpen()':         ['<c-z>'],
+                        \ 'OpenMulti()':          ['<D-o>'],
+                        \ 'PrtExit()':            ['<esc>', '<c-c>', '<c-g>'],
+                        \ }
+
+
+" 不搜索Go、nodejs的 库目录
+let g:ctrlsf_ignore_dir = ["node_modules", "vendor"]
+
+" 自定义快速查找
+func! MyCtrlPTag()
+        let g:ctrlp_prompt_mappings = {
+                                \ 'AcceptSelection("e")': ['<cr>', '<2-LeftMouse>'],
+                                \ 'AcceptSelection("t")': ['<c-t>'],
+                                \ }
+        CtrlPBufTag
+endfunc
+com! MyCtrlPTag call MyCtrlPTag()
+
+" 全局查找
+command! CO CtrlSFOpen
+let g:ctrlsf_winsize = '30%'
+let g:ctrlsf_auto_close = 1
+
+" 多光标使用鼠标映射
+let g:VM_mouse_mappings = 1
+
+" 随 vim 自启动
+let g:indent_guides_enable_on_vim_startup=1
+
+" 从第二层开始可视化显示缩进
+let g:indent_guides_start_level=2
+
+" 色块宽度
+let g:indent_guides_guide_size=1
+
+""设置 tagbar 使用的ctags的插件,必须要设置对  
+let g:tagbar_ctags_bin='/opt/homebrew/bin/ctags'  
+
+" &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
+" &&&&&&
+" &&&&&& 自动执行
+" &&&&&& 在 vim 打开文件后通过 autocmd 自动执行相应命令达到自定义需求
+
+" 开启 BufReadPost
+autocmd BufReadPost *.go,*.cpp,*.c,*.h,*.hpp,*.cc,*.cxx call tagbar#autoopen()
+
+" 浅色显示当前行
+autocmd InsertLeave * se nocul
+
+" 用浅色高亮当前行
+autocmd InsertEnter * se cul
+
+" 当NERDTree为剩下的唯一窗口时自动关闭
+autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
+
+" Don't write backup file if vim is being called by "crontab -e"
+autocmd BufWrite /private/tmp/crontab.* set nowritebackup nobackup
+" Don't write backup file if vim is being called by "chpass"
+autocmd BufWrite /private/etc/pw.* set nowritebackup nobackup
+
+"autocmd FileType go :set noexpandtab
+autocmd FileType yaml setlocal ts=2 sts=2 sw=2 expandtab
+autocmd FileType json :set cole=0
+
+autocmd BufNewFile,BufRead *.define setf define
+
+" 记录上一次编辑位置
+if has("autocmd")
+  autocmd BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
+endif
+
+" &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
+" &&&&&&
+" &&&&&& 自动执行
+
+" Json 序列化
+command! Jsonf :execute '%!jq .'
+
+" &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
+" &&&&&&
+" &&&&&& map 配置
+" &&&&&& 在 vim 中通过执行键盘命令与 vim 进行结合同义: 快捷键
+" &&&&&&
+" &&&&&&                 对于映射可能有以下几种前缀:
+" &&&&&& nore :表示非递归（no recursion）
+" &&&&&& n    :表示正常模式下生效
+" &&&&&& v    :表示可视模式下生效
+" &&&&&& i    :表示插入模式下生效
+" &&&&&& c    :表示命令模式下生效
+" &&&&&&
+" &&&&&&                            map 模式如下:
+" &&&&&&  map     noremap     unmap     mapclear
+" &&&&&& nmap    nnoremap    nunmap    nmapclear
+" &&&&&& vmap    vnoremap    vunmap    vmapclear
+" &&&&&& imap    inoremap    iunmap    imapclear
+" &&&&&& cmap    cnoremap    cunmap    cmapclear
+
+" 跳转到定义处
+map <leader>g  :YcmCompleter GoToDefinitionElseDeclaration<CR>
+
+" 设置键盘映射，通过空格设置折叠
+nnoremap <space> @=((foldclosed(line('.')<0)?'zc':'zo'))<CR>
+
+" 关闭NERDTree快捷键
+map <leader>r :NERDTreeMirror<CR>
+map <leader>t :NERDTreeToggle<CR>
+
+" tagbar 右窗口函数列表
+" 将开启tagbar的快捷键设置为　<Leader>tb
+nmap <leader>tb :TagbarToggle<CR>
+
+" Command + / 加注释
+map <leader>/ :TComment<CR>
+vmap <leader>/ :TComment<CR>
+imap <leader>/ :TComment<CR>
+vnoremap <leader>/ :TComment<CR>
+
+" ,f 快速搜索
+nnoremap <leader>f :CtrlSF<Space>
+
+" 去掉暂时退出 vim 窗口快捷键
+"noremap <c-z> <NOP>
+
+" 换行的时候可以自动跳到下一行
+imap {<CR> {<CR>}<ESC>O
+
+" split navigations
+nnoremap <C-J> <C-W><C-J>
+nnoremap <C-K> <C-W><C-K>
+nnoremap <C-L> <C-W><C-L>
+nnoremap <C-H> <C-W><C-H>
+
+" 以下配置避免了删除时导入剪切板操作
+nnoremap x "_x
+nnoremap X "_X
+nnoremap d "_d
+nnoremap dd "_dd
+nnoremap D "_D
+vnoremap d "_d
+vnoremap dd "_dd
+
+nnoremap <leader>x ""x
+nnoremap <leader>X ""X
+nnoremap <leader>d ""d
+nnoremap <leader>dd ""dd
+nnoremap <leader>D ""D
+vnoremap <leader>d ""d
+vnoremap <leader>dd ""dd
+
+" &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
+" &&&&&&
+" &&&&&& 颜色补充
+" &&&&&&
+
+syntax keyword cppSTLtype initializer_list
+
+" 颜色方案
+colorscheme Zenburn
+syntax on " 语法高亮
+
+highlight Pmenu          guifg=#F6F3E8 guibg=#444444
+highlight PmenuSel       guifg=#FFFFFF guibg=#11AADD
+highlight PMenuSbar      guibg=#5A647E
+highlight PMenuThumb     guibg=#AAAAAA
+highlight Visual         guibg=#2566FA
+highlight VertSplit      guibg=#1B1D1E
+highlight Cursor         guibg=#FF0000
+
+" 光标正行选中部分的底色
+" hi CursorLine   guibg=#D8D8DD ctermbg=253  gui=NONE cterm=NONE
+" 光标选中部分的底色
+" hi CursorColumn guibg=#ffff00 ctermbg=253  gui=NONE cterm=NONE
+hi Search guibg=#ffff00 ctermbg=253  gui=NONE cterm=NONE
+
+" Flagging Unnecessary Whitespace
+" http://stackoverflow.com/questions/11087041/gvim-to-custom-highlight-group-in-vimrc-not-working
+"hi BadWhitespace guifg=gray guibg=red ctermfg=gray ctermbg=red
+"highlight BadWhitespace ctermfg=16 ctermbg=253 guifg=#000000 guibg=#F8F8F0
+
+" 标示不必要的空白字符, 如果存在会标记颜色
+"autocmd BufRead,BufNewFile *.go,*.py,*.pyw,*.c,*.h match BadWhitespace /\s\+$/
+highlight BadWhitespace term=standout ctermbg=red guibg=red
+match BadWhitespace /\s\+$\| \+\t/
+
+" 选中所有高亮可以通过 S + 3
+" 取消所有高亮可以输入 :noh
+" 添加行号输入 set number, 取消行号输入 set nonumber
+
+" &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
+" &&&&&&
+" &&&&&& 功能键补充说明
+" &&&&&& https://www.bde.enseeiht.fr/~ollagnn/vim/vimrc/
+
+" 其中：<Esc>代表Escape键；<CR>代表Enter键；而功能键则用<F10>表示。首先进入命令行模式，然后执行新建标签页的:tabnew命令，最后返回常规模式。
+" 同理：对于组合键，可以用<C-Esc>代表Ctrl-Esc；使用<S-F1>表示Shift-F1。对于Mac用户，可以使用<D>代表Command键。
+" 注意：Alt键可以使用<M-key>或<A-key>来表示。
+" 关于键盘符号的详细说明，请使用:h key-notation命令查看帮助信息。
+
+" 上半翻页 Ctrl + d
+" 下班翻页 Ctrl + u
+
+" 多窗口
+" :vsplit name "在当前位置打开name文件 将原来文件向右移动, 简写 vs <name>
+" :split name "在当前位置打开name窗口 将原来文件向下移动, 简写 sp <name>
+" :new <name> 新窗口
+
+" Ctrl + h、j、k、l  可以在拆分窗口、NERDTree、Tagbar 间切换，与 j、k 的组合可以在 CtrlP 文件搜索插件中选择文件
+" Ctrl + o    返回／后退
+" ci" 修改配对标点符号中的文本内容。
+" di" 删除配对标点符号中的文本内容。
+" yi" 复制配对标点符号中的文本内容。
+" vi" 选中配对标点符号中的文本内容。
+" cs" | 快速把当前"环绕的字符改为由 环绕
+" cw  修改光标处单词
+" C   修改到行尾
+" s   替换光标所处字符，4s 替换4个字符
+" ~   光标处内容进行大小写转换 （Golang很实用）
+" ma  标记命名为a
+" `a | 跳转到标记a |
+" c`a | 修改到标记a |
+" J   合并当前行和下一行
+" 4j  向下跳转4行
+" 4k  向上跳转4行
+" I   行首插入
+" A   行尾插入
+" Ctrl + f    向前翻一页
+" Ctrl + b    向后翻一页
+" 15G 跳转到15行
+" G   跳转到文件底部
+" gg  跳转到文件头部
+" f"  行内跳转到字符"处
+" :split  将屏幕分为上下两个窗口
+" :vsplit 将屏幕分为左右两个窗口
+" ⌘ + W   关闭文件（不退出macvim)
+" ⌘ + /   注释代码 //
+" ,b  自动根据文件类型编译或测试当前Go文件
+" :Gitv   用Vim来查看Git的详细提交信息
+" Ctrl+t  翻译当前光标下单词，在 visual 模式下翻译选中单词或语句
+
